@@ -23,10 +23,12 @@ case $1 in
         die "Invalid position '$1'" ;;
 esac
 
+# Internal display detection with native resolution.
 int_display=$(xrandr --listmonitors | grep "0:" | awk '{print $4}')
 [ -z "$int_display" ] && die "No integrated display detected"
 int_resolution=$(xrandr | grep -A1 "^$int_display connected" | tail -n1 | awk '{print $1}' | tr -d '[:space:]')
 
+# External display detection with native resolution.
 ext_display=$(xrandr --listmonitors | grep "1:" | awk '{print $4}')
 [ -z "$ext_display" ] && die "No external display detected"
 ext_resolution=$(xrandr | grep -A1 "^$ext_display connected" | tail -n1 | awk '{print $1}' | tr -d '[:space:]')
@@ -40,4 +42,3 @@ configure_display() {
 }
 
 configure_display "$pos" "$int_resolution" "$ext_resolution"
-
